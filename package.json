@@ -1,0 +1,35 @@
+{
+  "name": "http2-static-server",
+  "version": "0.1.0",
+  "description": "http2 static server",
+  "main": "./index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amitmtrn/http2-static-server.git"
+  },
+  "keywords": [
+    "http2",
+    "server"
+  ],
+  "author": "Amit Choukroun",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/amitmtrn/http2-static-server/issues"
+  },
+  "homepage": "https://github.com/amitmtrn/http2-static-server#readme",
+  "dependencies": {
+    "express": "^4.13.1",
+    "http2": "^3.2.0",
+    "install": "^0.1.8",
+    "npm": "^2.13.0",
+    "serve-index": "^1.7.1"
+  },
+  "preferGlobal": "true",
+  "bin": {
+    "http2-static-server": "./index.js"
+  }
+
+}
