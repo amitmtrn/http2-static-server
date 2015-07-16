@@ -29,7 +29,7 @@
   },
   "preferGlobal": "true",
   "bin": {
-    "http2-static-server": "./index.js"
+    "http2-server": "./index.js"
   }
 
 }
