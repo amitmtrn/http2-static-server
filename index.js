@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
-var http2 = require("http2"),
-    url = require("url"),
-    path = require("path"),
-    fs = require("fs"),
+var nodePromise = require('node-promises'),
+    http2 = require('http2'),
+    url = require('url'),
+    path = require('path'),
+    fs = nodePromise('fs'),
     port = process.argv[2] || 8081;
 
 var options = {
@@ -18,7 +19,10 @@ function app(request, response) {
   var uri = url.parse(request.url).pathname,
       filename = path.join(process.cwd(), uri);
 
-  fs.exists(filename, function(exists) {
+  fs.existsPromise(filename)
+  .spread(checkFile);
+
+  function checkFile(exists) {
     if(!exists) {
       response.writeHead(404, {"Content-Type": "text/plain"});
       response.write("404 Not Found\n");
@@ -27,9 +31,9 @@ function app(request, response) {
     }
 
     if (fs.statSync(filename).isDirectory()) {
-      fs.exists(filename + '/index.html', function(exists){
+      fs.existsPromise(filename + '/index.html').spread( function(exists){
         if(exists) {
-          fs.readFile(filename + '/index.html', "binary", loadFile);
+          fs.readFilePromise(filename + '/index.html', "binary").spread(loadFile);
         } else {
           var files = fs.readdirSync(filename);
           var html = '';
@@ -45,9 +49,9 @@ function app(request, response) {
         }
       });
     } else {
-      fs.readFile(filename, "binary", loadFile);
+      fs.readFilePromise(filename, "binary").spread(loadFile);
     }
-  });
+  }
 
   function loadFile(err, file) {
     if(err) {

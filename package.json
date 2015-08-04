@@ -21,11 +21,11 @@
   },
   "homepage": "https://github.com/amitmtrn/http2-static-server#readme",
   "dependencies": {
-    "http2": "^3.2.0"
+    "http2": "^3.2.0",
+    "node-promises": "^0.2.1"
   },
   "preferGlobal": "true",
   "bin": {
     "http2-server": "./index.js"
   }
-
 }
