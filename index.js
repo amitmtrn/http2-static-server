@@ -24,10 +24,7 @@ function app(request, response) {
 
   function checkFile(exists) {
     if(!exists) {
-      response.writeHead(404, {"Content-Type": "text/plain"});
-      response.write("404 Not Found\n");
-      response.end();
-      return;
+      return send404();
     }
 
     if (fs.statSync(filename).isDirectory()) {
@@ -52,7 +49,12 @@ function app(request, response) {
       fs.readFilePromise(filename, "binary").spread(loadFile);
     }
   }
-
+function send404(argument) {
+  response.writeHead(404, {"Content-Type": "text/plain"});
+  response.write("404 Not Found\n");
+  response.end();
+  return;
+}
   function loadFile(err, file) {
     if(err) {
       response.writeHead(500, {"Content-Type": "text/plain"});
