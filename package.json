@@ -22,7 +22,8 @@
   "homepage": "https://github.com/amitmtrn/http2-static-server#readme",
   "dependencies": {
     "http2": "^3.2.0",
-    "node-promises": "^0.2.1"
+    "node-promises": "^0.2.1",
+    "q": "^1.4.1"
   },
   "preferGlobal": "true",
   "bin": {

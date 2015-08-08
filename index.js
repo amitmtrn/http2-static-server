@@ -3,6 +3,7 @@
 var nodePromise = require('node-promises'),
     http2 = require('http2'),
     url = require('url'),
+    Q = require('q'),
     path = require('path'),
     fs = nodePromise('fs'),
     port = process.argv[2] || 8081;
@@ -20,40 +21,52 @@ function app(request, response) {
       filename = path.join(process.cwd(), uri);
 
   fs.existsPromise(filename)
-  .spread(checkFile);
+    .spread(checkFile)
+    .then(directoryHandle);
 
-  function checkFile(exists) {
-    if(!exists) {
-      return send404();
-    }
-
-    if (fs.statSync(filename).isDirectory()) {
-      fs.existsPromise(filename + '/index.html').spread( function(exists){
-        if(exists) {
-          fs.readFilePromise(filename + '/index.html', "binary").spread(loadFile);
-        } else {
-          var files = fs.readdirSync(filename);
-          var html = '';
-          var showslash = uri + '/';
-          for (var i=0; i< files.length; i++){
-            if(uri == '/') {showslash = '/';} else {showslash = uri + '/';}
-            html += '<div><a href="' + showslash + files[i] + '">' + files[i] + "</a></div>";
-          }
-
-          response.writeHead(200);
-          response.write(html);
-          response.end();
-        }
-      });
+  function directoryHandle(isDirectory) {
+    if (isDirectory) {
+      fs.existsPromise(filename + '/index.html').spread(directoryViewer);
     } else {
       fs.readFilePromise(filename, "binary").spread(loadFile);
     }
+
+  }
+
+  function directoryViewer(exists) {
+    if(exists) {
+      fs.readFilePromise(filename + '/index.html', "binary").spread(loadFile);
+    } else {
+      var files = fs.readdirSync(filename);
+      var html = '';
+      var showslash = uri + '/';
+      for (var i=0; i< files.length; i++){
+        if(uri == '/') {showslash = '/';} else {showslash = uri + '/';}
+        html += '<div><a href="' + showslash + files[i] + '">' + files[i] + "</a></div>";
+      }
+
+      response.writeHead(200);
+      response.write(html);
+      response.end();
+    }
+  }
+
+  function checkFile(exists) {
+    var deferred = Q.defer();
+
+    if(!exists) {
+      deferred.reject(send404());
+    } else {
+      deferred.resolve(fs.statSync(filename).isDirectory());
+    }
+
+    return deferred.promise;
   }
 function send404(argument) {
   response.writeHead(404, {"Content-Type": "text/plain"});
   response.write("404 Not Found\n");
   response.end();
-  return;
+  return 'error 404';
 }
   function loadFile(err, file) {
     if(err) {
