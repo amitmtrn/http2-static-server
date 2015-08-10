@@ -19,9 +19,9 @@ bugs, improvements ideas, patch and etc
 
 ### To Do
 if you want to help with the code, these are the thing that need to be done:
-* [] auto load index files
-* [] log when server is up
-* [] log each the requests in the server
+* [x] auto load index files
+* [x] log when server is up
+* [x] log each the requests in the server
 
 ### Credits
 Any help would be appreciated and will be credit in this section

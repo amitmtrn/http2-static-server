@@ -16,9 +16,9 @@ var options = {
 
 
 function app(request, response) {
-
   var uri = url.parse(request.url).pathname,
       filename = path.join(process.cwd(), uri);
+  console.log(request.method + ' https://localhost:8081' + uri);
 
   fs.existsPromise(filename)
     .spread(checkFile)
