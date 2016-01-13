@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env nodejs
 
 var nodePromise = require('node-promises'),
     http2 = require('http2'),
